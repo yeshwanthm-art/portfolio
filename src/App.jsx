@@ -128,7 +128,7 @@ export default function App() {
           {navLinks.map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="nav-link">{l}</a></li>)}
         </ul>
         <div style={{ display:"flex", gap:".7rem", alignItems:"center" }}>
-          <a href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", padding:".46rem 1rem", border:`1px solid ${c.accent}`, color:c.accent, background:"transparent", borderRadius:"6px", textDecoration:"none", transition:"background .2s,color .2s" }}
+          <a href="\public\yeshwanth-resume.pdf" download={true} style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", padding:".46rem 1rem", border:`1px solid ${c.accent}`, color:c.accent, background:"transparent", borderRadius:"6px", textDecoration:"none", transition:"background .2s,color .2s" }}
             onMouseEnter={e=>{e.currentTarget.style.background=c.accent;e.currentTarget.style.color="#fff"}}
             onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=c.accent}}>
             ↓ Resume
@@ -159,7 +159,7 @@ export default function App() {
               Available for opportunities
             </div>
 
-            <h1 style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"clamp(3.2rem,6.5vw,6.5rem)", lineHeight:.92, letterSpacing:"-.03em", animation:"fadeUp .7s .12s ease both", marginBottom:".4rem" }}>
+            <h1 style={{ fontFamily:"'Syne',sans-serif", fontWeight:600, fontSize:"clamp(3.2rem,6.5vw,6.5rem)", lineHeight:.92, letterSpacing:"-.03em", animation:"fadeUp .7s .12s ease both", marginBottom:".4rem" }}>
               Yeshwanth
             </h1>
             <h1 style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"clamp(3.2rem,6.5vw,6.5rem)", lineHeight:.92, letterSpacing:"-.03em", animation:"fadeUp .7s .18s ease both", marginBottom:"1rem", background:"linear-gradient(135deg,#4f8ef7 0%,#7c5cfc 100%)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>
