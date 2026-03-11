@@ -4,9 +4,7 @@ const PHOTO_B64 = "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAA
 
 export default function App() {
   const [theme, setTheme] = useState("dark");
-  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
   const skillsRef = useRef(null);
   const [skillsVisible, setSkillsVisible] = useState(false);
 
@@ -26,8 +24,7 @@ export default function App() {
   }, []);
 
   const isDark = theme === "dark";
-
-  const css = {
+  const c = {
     bg: isDark ? "#080b12" : "#f4f6fb",
     bg2: isDark ? "#0d1120" : "#eef1f8",
     surface: isDark ? "#0f1623" : "#ffffff",
@@ -38,15 +35,17 @@ export default function App() {
     text: isDark ? "#e8edf5" : "#0f172a",
     text2: isDark ? "#8a96ae" : "#475569",
     text3: isDark ? "#4f5a70" : "#94a3b8",
+    card: isDark ? "#0f1623" : "#ffffff",
+    cardBorder: isDark ? "#1e2a42" : "#e2e8f0",
   };
 
   const projects = [
-    { num:"01", title:"AI Chat Assistant", desc:"Conversational AI chatbot powered by NLP models with real-time responses, conversation history, and a clean interface with dark mode support.", tags:["Python","React","NLP","FastAPI"] },
-    { num:"02", title:"Smart Task Manager", desc:"Full-stack productivity app with priority queuing, deadline reminders, drag-and-drop boards, and collaboration features.", tags:["React","Node.js","MongoDB","Express"] },
+    { num:"01", title:"AI Chat Assistant", desc:"Conversational AI chatbot powered by NLP models with real-time responses, conversation history, and dark mode support.", tags:["Python","React","NLP","FastAPI"] },
+    { num:"02", title:"Smart Task Manager", desc:"Full-stack productivity app with priority queuing, deadline reminders, drag-and-drop boards, and team collaboration.", tags:["React","Node.js","MongoDB","Express"] },
     { num:"03", title:"Data Visualizer Dashboard", desc:"Interactive dashboard for complex datasets. Supports CSV imports, multiple chart types, filters, and real-time streaming.", tags:["Python","Pandas","D3.js","Flask"] },
-    { num:"04", title:"E-Commerce Platform", desc:"Feature-rich online store with authentication, product search, cart, payment integration, and admin panel.", tags:["React","Java","Spring Boot","MySQL"] },
+    { num:"04", title:"E-Commerce Platform", desc:"Feature-rich online store with auth, product search, cart, payment integration, and admin panel.", tags:["React","Java","Spring Boot","MySQL"] },
     { num:"05", title:"Algorithm Visualizer", desc:"Educational web tool that visually demonstrates sorting and graph algorithms step-by-step for DSA learners.", tags:["JavaScript","HTML/CSS","Canvas API"] },
-    { num:"06", title:"Portfolio Website", desc:"This very website — a personal portfolio built with React. Features dark/light mode, smooth animations, and responsive design.", tags:["React","CSS","JavaScript"] },
+    { num:"06", title:"Portfolio Website", desc:"This very site — built with React. Features dark/light mode, smooth animations, and responsive design.", tags:["React","CSS","JavaScript"] },
   ];
 
   const skills = [
@@ -60,195 +59,210 @@ export default function App() {
     { icon:"🐍", title:"Python for Everybody", desc:"Coursera — University of Michigan. Data structures, APIs, and databases." },
     { icon:"🤖", title:"Machine Learning Specialization", desc:"Coursera — DeepLearning.AI. Neural networks and ML best practices." },
     { icon:"🏆", title:"Smart India Hackathon", desc:"National-level hackathon. Built AI-powered solution for government problem." },
-    { icon:"💡", title:"LeetCode — 300+ Problems", desc:"Solved 300+ problems across arrays, trees, graphs, and DP." },
+    { icon:"💡", title:"LeetCode — 300+ Problems", desc:"Solved 300+ problems across arrays, trees, graphs, DP and more." },
     { icon:"☁️", title:"AWS Cloud Practitioner", desc:"Certified in AWS fundamentals, cloud services, and architecture." },
     { icon:"🥈", title:"College Coding Contest — 2nd Place", desc:"Inter-college competitive programming with 200+ participants." },
   ];
 
   const navLinks = ["About","Skills","Projects","Education","Achievements","Contact"];
 
+  const Card = ({ children, style={}, className="" }) => (
+    <div className={`card ${className}`} style={{ background:c.card, border:`1px solid ${c.cardBorder}`, borderRadius:"14px", ...style }}>{children}</div>
+  );
+
   return (
-    <div style={{ fontFamily:"'DM Mono', monospace", background:css.bg, color:css.text, minHeight:"100vh", overflowX:"hidden", transition:"background .3s, color .3s" }}>
+    <div style={{ fontFamily:"'DM Mono',monospace", background:c.bg, color:c.text, minHeight:"100vh", overflowX:"hidden", transition:"background .3s,color .3s" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap');
-        * { margin:0; padding:0; box-sizing:border-box; }
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior:smooth; }
         ::-webkit-scrollbar { width:4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #4f8ef7; border-radius:2px; }
-        @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        ::-webkit-scrollbar-thumb { background:#4f8ef7; border-radius:2px; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
         @keyframes spin { to{transform:rotate(360deg)} }
-        @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
-        @keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
-        @keyframes photoReveal { from{opacity:0;transform:scale(0.92) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
-        .nav-link { color: #8a96ae; text-decoration:none; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; transition:color .2s; }
-        .nav-link:hover { color: #4f8ef7; }
-        .hero-name { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(3rem,7vw,6.5rem); line-height:.95; letter-spacing:-.03em; animation:fadeUp .8s .1s ease both; }
-        .hero-title { font-family:'Instrument Serif',serif; font-style:italic; font-size:clamp(1.3rem,2.5vw,2rem); color:#8a96ae; animation:fadeUp .8s .2s ease both; margin:.5rem 0 1.2rem; }
-        .hero-tag { animation:fadeUp .8s .05s ease both; }
-        .hero-cta { animation:fadeUp .8s .35s ease both; }
-        .hero-tagline { animation:fadeUp .8s .28s ease both; }
-        .photo-wrap { animation:photoReveal 1s .4s ease both; }
-        .btn-primary { font-family:'DM Mono',monospace; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; padding:.8rem 1.8rem; background:linear-gradient(135deg,#4f8ef7,#7c5cfc); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:transform .2s,box-shadow .2s; text-decoration:none; }
-        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(79,142,247,.3); }
-        .btn-outline { font-family:'DM Mono',monospace; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; padding:.8rem 1.8rem; border:1px solid #1e2a42; color:#e8edf5; background:transparent; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:border-color .2s,color .2s,transform .2s; text-decoration:none; }
-        .btn-outline:hover { border-color:#4f8ef7; color:#4f8ef7; transform:translateY(-2px); }
-        .card { background:#0f1623; border:1px solid #1e2a42; border-radius:14px; transition:border-color .25s,transform .25s; }
-        .card:hover { border-color:#4f8ef7; transform:translateY(-4px); }
-        .project-card { background:#0f1623; border:1px solid #1e2a42; border-radius:16px; padding:2rem; display:flex; flex-direction:column; transition:border-color .25s,transform .25s,box-shadow .25s; position:relative; overflow:hidden; }
-        .project-card::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,#4f8ef7,transparent); opacity:0; transition:opacity .25s; }
-        .project-card:hover { border-color:#4f8ef7; transform:translateY(-5px); box-shadow:0 12px 40px rgba(79,142,247,.15); }
+        @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes photoReveal { from{opacity:0;transform:scale(.94) translateY(18px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        @keyframes scrollBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+        .nav-link { color:#8a96ae; text-decoration:none; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; transition:color .2s; }
+        .nav-link:hover { color:#4f8ef7; }
+        .card { transition:border-color .25s,transform .25s,box-shadow .25s; }
+        .card:hover { border-color:#4f8ef7 !important; transform:translateY(-4px); box-shadow:0 12px 36px rgba(79,142,247,.1); }
+        .project-card { transition:border-color .25s,transform .25s,box-shadow .25s; position:relative; overflow:hidden; }
+        .project-card::before { content:""; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,#4f8ef7,transparent); opacity:0; transition:opacity .25s; }
+        .project-card:hover { border-color:#4f8ef7 !important; transform:translateY(-5px); box-shadow:0 16px 48px rgba(79,142,247,.15); }
         .project-card:hover::before { opacity:1; }
-        .skill-bar-fill { height:4px; border-radius:100px; background:linear-gradient(90deg,#4f8ef7,#7c5cfc); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
-        .contact-link { display:flex; align-items:center; gap:1rem; background:#0f1623; border:1px solid #1e2a42; border-radius:12px; padding:1.1rem 1.4rem; text-decoration:none; color:#e8edf5; transition:border-color .2s,transform .2s; }
-        .contact-link:hover { border-color:#4f8ef7; transform:translateX(4px); }
-        .social-icon { width:36px; height:36px; border-radius:9px; border:1px solid #1e2a42; display:flex; align-items:center; justify-content:center; color:#4f5a70; text-decoration:none; font-size:.85rem; transition:border-color .2s,color .2s,transform .2s; }
-        .social-icon:hover { border-color:#4f8ef7; color:#4f8ef7; transform:translateY(-2px); }
+        .edu-item:hover { border-color:#4f8ef7 !important; transform:translateX(5px) !important; }
+        .ach-card:hover { border-color:#00d4aa !important; transform:translateY(-3px) !important; }
+        .contact-link:hover { border-color:#4f8ef7 !important; transform:translateX(4px) !important; }
+        .btn-primary { font-family:'DM Mono',monospace; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; padding:.82rem 1.8rem; background:linear-gradient(135deg,#4f8ef7,#7c5cfc); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:transform .2s,box-shadow .2s; text-decoration:none; }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(79,142,247,.35); }
+        .btn-outline { font-family:'DM Mono',monospace; font-size:.78rem; letter-spacing:.07em; text-transform:uppercase; padding:.82rem 1.8rem; border:1px solid rgba(255,255,255,.15); color:#e8edf5; background:transparent; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; gap:.5rem; transition:border-color .2s,color .2s,transform .2s; text-decoration:none; }
+        .btn-outline:hover { border-color:#4f8ef7; color:#4f8ef7; transform:translateY(-2px); }
+        .skill-fill { height:4px; border-radius:100px; background:linear-gradient(90deg,#4f8ef7,#7c5cfc); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
         .form-input { background:#0f1623; border:1px solid #1e2a42; border-radius:8px; padding:.75rem 1rem; color:#e8edf5; font-family:'DM Mono',monospace; font-size:.82rem; outline:none; width:100%; transition:border-color .2s; }
         .form-input:focus { border-color:#4f8ef7; }
-        .edu-item { background:#0f1623; border:1px solid #1e2a42; border-radius:14px; padding:1.8rem 2rem; display:grid; grid-template-columns:auto 1fr; gap:1.4rem; align-items:start; transition:border-color .2s,transform .2s; }
-        .edu-item:hover { border-color:#4f8ef7; transform:translateX(5px); }
-        .ach-card { background:#0f1623; border:1px solid #1e2a42; border-radius:12px; padding:1.5rem; display:flex; gap:1rem; align-items:start; transition:border-color .2s,transform .2s; }
-        .ach-card:hover { border-color:#00d4aa; transform:translateY(-3px); }
         .section-tag { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:#4f8ef7; display:flex; align-items:center; gap:.6rem; margin-bottom:.7rem; }
-        .section-tag::before { content:''; width:24px; height:1px; background:#4f8ef7; display:block; }
+        .section-tag::before { content:""; width:24px; height:1px; background:#4f8ef7; display:block; }
         .section-title { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2rem,5vw,3rem); letter-spacing:-.02em; line-height:1.1; margin-bottom:1rem; }
-        .tag { font-family:'DM Mono',monospace; font-size:.68rem; padding:.28rem .65rem; border-radius:6px; background:#121829; border:1px solid #1e2a42; color:#4f5a70; letter-spacing:.04em; }
-        @media(max-width:768px) {
-          .hero-grid { flex-direction:column-reverse !important; gap:2rem !important; }
-          .photo-container { width:260px !important; height:320px !important; }
+        .tag-chip { font-family:'DM Mono',monospace; font-size:.67rem; padding:.26rem .62rem; border-radius:6px; background:#121829; border:1px solid #1e2a42; color:#4f5a70; letter-spacing:.04em; }
+        .photo-float { animation:floatY 5s ease-in-out infinite; }
+        @media(max-width:900px) {
+          .hero-inner { flex-direction:column-reverse !important; align-items:center !important; text-align:center !important; }
+          .hero-text { align-items:center !important; }
+          .hero-cta { justify-content:center !important; }
+          .hero-socials { justify-content:center !important; }
+          .hero-badge { align-self:center !important; }
+          .photo-frame { width:260px !important; height:320px !important; }
           .contact-grid { grid-template-columns:1fr !important; }
           .form-row { grid-template-columns:1fr !important; }
-          .mobile-hide { display:none !important; }
+          .about-grid { grid-template-columns:1fr !important; }
+          .about-photo { display:none !important; }
         }
       `}</style>
 
-      {/* NAV */}
-      <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, display:"flex", alignItems:"center", justifyContent:"space-between", padding: scrolled ? ".7rem 5%" : "1.1rem 5%", background: isDark ? "rgba(8,11,18,0.88)" : "rgba(244,246,251,0.9)", backdropFilter:"blur(20px)", borderBottom:`1px solid ${css.border}`, transition:"all .3s" }}>
-        <a href="#hero" style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"1.3rem", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", textDecoration:"none" }}>YM.</a>
-        <ul style={{ display:"flex", alignItems:"center", gap:"2rem", listStyle:"none" }} className="mobile-hide">
+      {/* ── NAV ── */}
+      <nav style={{ position:"fixed", top:0, left:0, right:0, zIndex:100, display:"flex", alignItems:"center", justifyContent:"space-between", padding: scrolled ? ".65rem 6%" : "1.1rem 6%", background: isDark ? "rgba(8,11,18,0.9)" : "rgba(244,246,251,0.92)", backdropFilter:"blur(20px)", borderBottom:`1px solid ${c.border}`, transition:"padding .3s,background .3s" }}>
+        <a href="#hero" style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"1.35rem", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", textDecoration:"none", letterSpacing:"-.02em" }}>YM.</a>
+        <ul style={{ display:"flex", alignItems:"center", gap:"2.2rem", listStyle:"none" }}>
           {navLinks.map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="nav-link">{l}</a></li>)}
         </ul>
         <div style={{ display:"flex", gap:".7rem", alignItems:"center" }}>
-          <a href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", padding:".48rem 1rem", border:`1px solid ${css.accent}`, color:css.accent, background:"transparent", borderRadius:"6px", cursor:"pointer", textDecoration:"none", transition:"background .2s,color .2s" }}
-            onMouseEnter={e=>{e.target.style.background=css.accent;e.target.style.color="#fff"}}
-            onMouseLeave={e=>{e.target.style.background="transparent";e.target.style.color=css.accent}}>
+          <a href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", padding:".46rem 1rem", border:`1px solid ${c.accent}`, color:c.accent, background:"transparent", borderRadius:"6px", textDecoration:"none", transition:"background .2s,color .2s" }}
+            onMouseEnter={e=>{e.currentTarget.style.background=c.accent;e.currentTarget.style.color="#fff"}}
+            onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=c.accent}}>
             ↓ Resume
           </a>
-          <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
-            style={{ background:"none", border:`1px solid ${css.border}`, color:css.text2, width:"36px", height:"36px", borderRadius:"8px", cursor:"pointer", fontSize:".9rem", display:"flex", alignItems:"center", justifyContent:"center" }}>
+          <button onClick={() => setTheme(t => t==="dark"?"light":"dark")}
+            style={{ background:"none", border:`1px solid ${c.border}`, color:c.text2, width:"36px", height:"36px", borderRadius:"8px", cursor:"pointer", fontSize:".9rem", display:"flex", alignItems:"center", justifyContent:"center" }}>
             {isDark ? "☀️" : "🌙"}
           </button>
         </div>
       </nav>
 
-      {/* HERO */}
-      <section id="hero" style={{ minHeight:"100vh", display:"flex", alignItems:"center", padding:"7rem 5% 4rem", position:"relative", overflow:"hidden" }}>
-        {/* Grid bg */}
-        <div style={{ position:"absolute", inset:0, backgroundImage:`linear-gradient(${css.border} 1px, transparent 1px), linear-gradient(90deg, ${css.border} 1px, transparent 1px)`, backgroundSize:"60px 60px", opacity:.2, maskImage:"radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%)" }} />
-        <div style={{ position:"absolute", top:"15%", left:"5%", width:"500px", height:"500px", background:`radial-gradient(circle, rgba(79,142,247,0.15) 0%, transparent 70%)`, pointerEvents:"none" }} />
-        <div style={{ position:"absolute", bottom:"10%", right:"5%", width:"350px", height:"350px", background:`radial-gradient(circle, rgba(124,92,252,0.12) 0%, transparent 70%)`, pointerEvents:"none" }} />
+      {/* ── HERO ── full-width, no maxWidth constraint ── */}
+      <section id="hero" style={{ width:"100%", minHeight:"100vh", display:"flex", alignItems:"center", padding:"0", position:"relative", overflow:"hidden", background:c.bg }}>
+        {/* Full-bleed grid background */}
+        <div style={{ position:"absolute", inset:0, backgroundImage:`linear-gradient(${c.border} 1px, transparent 1px), linear-gradient(90deg, ${c.border} 1px, transparent 1px)`, backgroundSize:"64px 64px", opacity:.18, maskImage:"radial-gradient(ellipse 90% 80% at 50% 50%, black 20%, transparent 100%)" }} />
+        {/* Glow orbs */}
+        <div style={{ position:"absolute", top:"10%", left:"8%", width:"600px", height:"600px", background:"radial-gradient(circle, rgba(79,142,247,0.14) 0%, transparent 65%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", bottom:"5%", right:"8%", width:"500px", height:"500px", background:"radial-gradient(circle, rgba(124,92,252,0.11) 0%, transparent 65%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-50%)", width:"800px", height:"400px", background:"radial-gradient(ellipse, rgba(79,142,247,0.05) 0%, transparent 70%)", pointerEvents:"none" }} />
 
-        <div style={{ position:"relative", zIndex:1, width:"100%", maxWidth:"1200px", margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"3rem", flexWrap:"wrap" }} className="hero-grid">
-          {/* Text */}
-          <div style={{ flex:"1", minWidth:"300px" }}>
-            <div className="hero-tag" style={{ display:"inline-flex", alignItems:"center", gap:".5rem", fontSize:".72rem", letterSpacing:".14em", textTransform:"uppercase", color:css.accent3, border:`1px solid ${css.accent3}`, padding:".35rem .9rem", borderRadius:"100px", marginBottom:"1.6rem" }}>
-              <span style={{ width:"6px", height:"6px", borderRadius:"50%", background:css.accent3, display:"block", animation:"pulse 2s infinite" }} />
+        {/* Hero inner — full width with generous side padding */}
+        <div className="hero-inner" style={{ position:"relative", zIndex:1, width:"100%", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"9rem 8% 5rem", gap:"4rem" }}>
+
+          {/* LEFT — text */}
+          <div className="hero-text" style={{ flex:"1 1 480px", display:"flex", flexDirection:"column", alignItems:"flex-start", maxWidth:"600px" }}>
+            <div className="hero-badge" style={{ display:"inline-flex", alignItems:"center", gap:".5rem", fontSize:".72rem", letterSpacing:".14em", textTransform:"uppercase", color:c.accent3, border:`1px solid ${c.accent3}`, padding:".35rem .95rem", borderRadius:"100px", marginBottom:"1.8rem", animation:"fadeUp .7s .05s ease both" }}>
+              <span style={{ width:"7px", height:"7px", borderRadius:"50%", background:c.accent3, animation:"pulse 2s infinite", flexShrink:0 }} />
               Available for opportunities
             </div>
-            <h1 className="hero-name">
-              Yeshwanth<br/>
-              <span style={{ background:"linear-gradient(135deg,#4f8ef7 0%,#7c5cfc 100%)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>M</span>
+
+            <h1 style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"clamp(3.2rem,6.5vw,6.5rem)", lineHeight:.92, letterSpacing:"-.03em", animation:"fadeUp .7s .12s ease both", marginBottom:".4rem" }}>
+              Yeshwanth
             </h1>
-            <p className="hero-title">Software Developer / Tech Enthusiast</p>
-            <p className="hero-tagline" style={{ fontSize:".9rem", color:css.text2, lineHeight:1.8, maxWidth:"460px", marginBottom:"2.2rem" }}>
+            <h1 style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"clamp(3.2rem,6.5vw,6.5rem)", lineHeight:.92, letterSpacing:"-.03em", animation:"fadeUp .7s .18s ease both", marginBottom:"1rem", background:"linear-gradient(135deg,#4f8ef7 0%,#7c5cfc 100%)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>
+              M
+            </h1>
+
+            <p style={{ fontFamily:"'Instrument Serif',serif", fontStyle:"italic", fontSize:"clamp(1.25rem,2.2vw,1.9rem)", color:c.text2, animation:"fadeUp .7s .24s ease both", marginBottom:"1.2rem" }}>
+              Software Developer / Tech Enthusiast
+            </p>
+            <p style={{ fontSize:".9rem", color:c.text2, lineHeight:1.82, maxWidth:"460px", marginBottom:"2.4rem", animation:"fadeUp .7s .3s ease both" }}>
               Building smart solutions with code — where logic meets creativity and ideas become reality.
             </p>
-            <div className="hero-cta" style={{ display:"flex", gap:"1rem", flexWrap:"wrap" }}>
+
+            <div className="hero-cta" style={{ display:"flex", gap:"1rem", flexWrap:"wrap", animation:"fadeUp .7s .36s ease both" }}>
               <a href="#projects" className="btn-primary">⚡ View Projects</a>
               <a href="#contact" className="btn-outline">✉ Contact Me</a>
             </div>
-            <div style={{ display:"flex", gap:"1.2rem", marginTop:"2.5rem", animation:"fadeUp .8s .5s ease both" }}>
+
+            <div className="hero-socials" style={{ display:"flex", gap:"1.4rem", marginTop:"2.4rem", animation:"fadeUp .7s .44s ease both" }}>
               {[["GitHub","https://github.com"],["LinkedIn","https://linkedin.com"],["Twitter","https://twitter.com"]].map(([label,url]) => (
-                <a key={label} href={url} target="_blank" rel="noreferrer" style={{ fontSize:".72rem", color:css.text3, textDecoration:"none", letterSpacing:".06em", textTransform:"uppercase", transition:"color .2s" }}
-                  onMouseEnter={e=>e.target.style.color=css.accent}
-                  onMouseLeave={e=>e.target.style.color=css.text3}>
+                <a key={label} href={url} target="_blank" rel="noreferrer" style={{ fontSize:".72rem", color:c.text3, textDecoration:"none", letterSpacing:".07em", textTransform:"uppercase", transition:"color .2s" }}
+                  onMouseEnter={e=>e.currentTarget.style.color=c.accent}
+                  onMouseLeave={e=>e.currentTarget.style.color=c.text3}>
                   {label} ↗
                 </a>
               ))}
             </div>
           </div>
 
-          {/* PHOTO */}
-          <div className="photo-wrap" style={{ flexShrink:0 }}>
-            <div className="photo-container" style={{ position:"relative", width:"340px", height:"420px" }}>
-              {/* Glow behind */}
-              <div style={{ position:"absolute", inset:"-20px", background:"radial-gradient(circle at 50% 60%, rgba(79,142,247,0.25) 0%, rgba(124,92,252,0.15) 40%, transparent 70%)", borderRadius:"50%", filter:"blur(20px)" }} />
-              {/* Decorative ring */}
-              <div style={{ position:"absolute", inset:"-12px", borderRadius:"40% 60% 55% 45% / 45% 40% 60% 55%", border:"1px solid rgba(79,142,247,0.3)", animation:"spin 18s linear infinite" }} />
-              <div style={{ position:"absolute", inset:"-24px", borderRadius:"55% 45% 40% 60% / 60% 55% 45% 40%", border:"1px dashed rgba(124,92,252,0.2)", animation:"spin 28s linear infinite reverse" }} />
+          {/* RIGHT — photo */}
+          <div style={{ flex:"0 0 auto", display:"flex", alignItems:"center", justifyContent:"center", animation:"photoReveal 1s .3s ease both" }}>
+            <div style={{ position:"relative" }}>
+              {/* Outer glow */}
+              <div style={{ position:"absolute", inset:"-30px", background:"radial-gradient(circle at 50% 55%, rgba(79,142,247,0.28) 0%, rgba(124,92,252,0.18) 40%, transparent 70%)", borderRadius:"50%", filter:"blur(16px)" }} />
+              {/* Spinning decorative rings */}
+              <div style={{ position:"absolute", inset:"-18px", borderRadius:"42% 58% 52% 48% / 46% 42% 58% 54%", border:"1px solid rgba(79,142,247,.28)", animation:"spin 20s linear infinite" }} />
+              <div style={{ position:"absolute", inset:"-30px", borderRadius:"55% 45% 42% 58% / 58% 52% 48% 42%", border:"1px dashed rgba(124,92,252,.18)", animation:"spin 32s linear infinite reverse" }} />
               {/* Photo frame */}
-              <div style={{ position:"relative", width:"100%", height:"100%", borderRadius:"32px", overflow:"hidden", border:"2px solid rgba(79,142,247,0.4)", boxShadow:"0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,142,247,0.1)" }}>
-                <img src={`data:image/png;base64,${PHOTO_B64}`} alt="Yeshwanth M"
-                  style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center", display:"block" }} />
-                {/* Subtle gradient overlay at bottom */}
-                <div style={{ position:"absolute", bottom:0, left:0, right:0, height:"80px", background:`linear-gradient(transparent, ${isDark ? "rgba(8,11,18,0.6)" : "rgba(244,246,251,0.4)"}` }} />
+              <div className="photo-frame photo-float" style={{ position:"relative", width:"360px", height:"440px", borderRadius:"36px", overflow:"hidden", border:"2px solid rgba(79,142,247,.45)", boxShadow:"0 24px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08)" }}>
+                <img
+                  src={`data:image/png;base64,${PHOTO_B64}`}
+                  alt="Yeshwanth M"
+                  style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center top", display:"block" }}
+                />
+                {/* Bottom fade */}
+                <div style={{ position:"absolute", bottom:0, left:0, right:0, height:"90px", background:`linear-gradient(transparent, ${isDark?"rgba(8,11,18,.55)":"rgba(244,246,251,.4)"})` }} />
               </div>
-              {/* Floating badge */}
-              <div style={{ position:"absolute", bottom:"-16px", left:"50%", transform:"translateX(-50%)", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", borderRadius:"100px", padding:".5rem 1.2rem", whiteSpace:"nowrap", fontSize:".72rem", fontWeight:600, color:"#fff", letterSpacing:".06em", boxShadow:"0 8px 24px rgba(79,142,247,.4)" }}>
+              {/* Badge */}
+              <div style={{ position:"absolute", bottom:"-18px", left:"50%", transform:"translateX(-50%)", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", borderRadius:"100px", padding:".52rem 1.3rem", whiteSpace:"nowrap", fontSize:".72rem", fontWeight:600, color:"#fff", letterSpacing:".07em", boxShadow:"0 8px 28px rgba(79,142,247,.45)", zIndex:10 }}>
                 💼 Open to Work
               </div>
             </div>
           </div>
         </div>
 
-        <div style={{ position:"absolute", bottom:"2rem", left:"50%", transform:"translateX(-50%)", display:"flex", flexDirection:"column", alignItems:"center", gap:".4rem", color:css.text3, fontSize:".68rem", letterSpacing:".14em", textTransform:"uppercase", animation:"bounce 1.8s infinite" }}>
-          <span>Scroll</span>
-          <span>↓</span>
+        {/* Scroll hint */}
+        <div style={{ position:"absolute", bottom:"2rem", left:"50%", transform:"translateX(-50%)", display:"flex", flexDirection:"column", alignItems:"center", gap:".4rem", color:c.text3, fontSize:".68rem", letterSpacing:".14em", textTransform:"uppercase", animation:"scrollBounce 2s infinite" }}>
+          <span>Scroll</span><span style={{ fontSize:".8rem" }}>↓</span>
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section id="about" style={{ padding:"6rem 5%", maxWidth:"1200px", margin:"0 auto" }}>
-        <div className="section-tag">About Me</div>
-        <h2 className="section-title">Who I Am</h2>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"4rem", alignItems:"start" }}>
-          <div>
-            {["Hi! I'm Yeshwanth M, a passionate software developer with a deep curiosity for how technology shapes the world around us. I thrive at the intersection of creative problem-solving and clean, efficient code.",
-              "My journey in tech began with a fascination for algorithms and logic, which evolved into building full-stack applications, exploring AI/ML systems, and contributing to meaningful software projects.",
-              "When I'm not coding, I'm exploring the latest in AI research, participating in hackathons, or sharpening competitive programming skills. I'm always eager to learn, collaborate, and build things that matter."].map((p, i) => (
-              <p key={i} style={{ color:css.text2, lineHeight:1.85, fontSize:".9rem", marginBottom:"1.2rem" }}>{p}</p>
-            ))}
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.2rem", marginTop:"2rem" }}>
-              {[["10+","Projects Built"],["5+","Certifications"],["3+","Hackathons"],["∞","Curiosity"]].map(([n,l]) => (
-                <div key={l} className="card" style={{ padding:"1.3rem 1.5rem" }}>
-                  <div style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"2rem", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>{n}</div>
-                  <div style={{ fontSize:".73rem", color:css.text3, letterSpacing:".07em", textTransform:"uppercase", marginTop:".3rem" }}>{l}</div>
-                </div>
-              ))}
+      {/* ── ABOUT ── */}
+      <section id="about" style={{ padding:"6rem 8%", background:c.bg }}>
+        <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
+          <div className="section-tag">About Me</div>
+          <h2 className="section-title">Who I Am</h2>
+          <div className="about-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"4rem", alignItems:"center" }}>
+            <div>
+              {[
+                "Hi! I'm Yeshwanth M, a passionate software developer with a deep curiosity for how technology shapes the world. I thrive at the intersection of creative problem-solving and clean, efficient code.",
+                "My journey in tech began with a fascination for algorithms and logic, which evolved into building full-stack applications, exploring AI/ML systems, and contributing to meaningful software projects.",
+                "When I'm not coding, I'm exploring AI research, competing in hackathons, or sharpening competitive programming skills. Always eager to learn, collaborate, and build things that matter."
+              ].map((p,i) => <p key={i} style={{ color:c.text2, lineHeight:1.85, fontSize:".9rem", marginBottom:"1.1rem" }}>{p}</p>)}
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.2rem", marginTop:"2rem" }}>
+                {[["10+","Projects Built"],["5+","Certifications"],["3+","Hackathons"],["∞","Curiosity"]].map(([n,l]) => (
+                  <Card key={l} style={{ padding:"1.3rem 1.5rem" }}>
+                    <div style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"2rem", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" }}>{n}</div>
+                    <div style={{ fontSize:".72rem", color:c.text3, letterSpacing:".07em", textTransform:"uppercase", marginTop:".3rem" }}>{l}</div>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"center" }} className="mobile-hide">
-            <div style={{ position:"relative", width:"260px", height:"320px" }}>
-              <div style={{ position:"absolute", inset:"-10px", background:"radial-gradient(circle, rgba(79,142,247,0.2) 0%, transparent 70%)", borderRadius:"50%" }} />
-              <div style={{ position:"relative", width:"100%", height:"100%", borderRadius:"28px", overflow:"hidden", border:`2px solid ${css.border}` }}>
-                <img src={`data:image/png;base64,${PHOTO_B64}`} alt="Yeshwanth M" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"top center" }} />
+            <div className="about-photo" style={{ display:"flex", alignItems:"center", justifyContent:"center" }}>
+              <div style={{ position:"relative", width:"280px", height:"340px" }}>
+                <div style={{ position:"absolute", inset:"-12px", background:"radial-gradient(circle, rgba(79,142,247,.2) 0%, transparent 70%)", borderRadius:"50%" }} />
+                <div style={{ position:"relative", width:"100%", height:"100%", borderRadius:"28px", overflow:"hidden", border:`2px solid ${c.border}` }}>
+                  <img src={`data:image/png;base64,${PHOTO_B64}`} alt="Yeshwanth M" style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center top" }} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SKILLS */}
-      <section id="skills" ref={skillsRef} style={{ padding:"6rem 5%", background:css.bg2 }}>
+      {/* ── SKILLS ── */}
+      <section id="skills" ref={skillsRef} style={{ padding:"6rem 8%", background:c.bg2 }}>
         <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
           <div className="section-tag">Skills</div>
           <h2 className="section-title">My Toolkit</h2>
-          <p style={{ color:css.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"500px", marginBottom:"3rem" }}>Technologies and tools I work with to bring ideas to life.</p>
+          <p style={{ color:c.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"500px", marginBottom:"3rem" }}>Technologies and tools I work with to bring ideas to life.</p>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))", gap:"1.4rem" }}>
             {skills.map(({ cat, icon, items }) => (
-              <div key={cat} className="card" style={{ padding:"1.8rem" }}>
+              <Card key={cat} style={{ padding:"1.8rem" }}>
                 <div style={{ display:"flex", alignItems:"center", gap:".8rem", marginBottom:"1.5rem" }}>
                   <div style={{ width:"40px", height:"40px", borderRadius:"10px", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.1rem" }}>{icon}</div>
                   <span style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:"1rem" }}>{cat}</span>
@@ -257,43 +271,41 @@ export default function App() {
                   {items.map(({ name, pct }) => (
                     <div key={name}>
                       <div style={{ display:"flex", justifyContent:"space-between", marginBottom:".35rem" }}>
-                        <span style={{ fontSize:".78rem", color:css.text2 }}>{name}</span>
-                        <span style={{ fontSize:".72rem", color:css.accent }}>{pct}%</span>
+                        <span style={{ fontSize:".78rem", color:c.text2 }}>{name}</span>
+                        <span style={{ fontSize:".72rem", color:c.accent }}>{pct}%</span>
                       </div>
-                      <div style={{ height:"4px", background:css.border, borderRadius:"100px", overflow:"hidden" }}>
-                        <div className="skill-bar-fill" style={{ width: skillsVisible ? `${pct}%` : "0%" }} />
+                      <div style={{ height:"4px", background:c.border, borderRadius:"100px", overflow:"hidden" }}>
+                        <div className="skill-fill" style={{ width: skillsVisible ? `${pct}%` : "0%" }} />
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* PROJECTS */}
-      <section id="projects" style={{ padding:"6rem 5%" }}>
+      {/* ── PROJECTS ── */}
+      <section id="projects" style={{ padding:"6rem 8%", background:c.bg }}>
         <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
           <div className="section-tag">Projects</div>
           <h2 className="section-title">What I've Built</h2>
-          <p style={{ color:css.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"500px", marginBottom:"3rem" }}>A selection of projects that showcase my skills and passion for building.</p>
+          <p style={{ color:c.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"500px", marginBottom:"3rem" }}>A selection of projects showcasing my skills and passion for building.</p>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))", gap:"1.4rem" }}>
             {projects.map(({ num, title, desc, tags }) => (
-              <div key={num} className="project-card">
-                <div style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", color:css.text3, letterSpacing:".12em", marginBottom:".9rem" }}>{num}</div>
+              <div key={num} className="project-card" style={{ background:c.card, border:`1px solid ${c.cardBorder}`, borderRadius:"16px", padding:"2rem", display:"flex", flexDirection:"column" }}>
+                <div style={{ fontFamily:"'DM Mono',monospace", fontSize:".7rem", color:c.text3, letterSpacing:".12em", marginBottom:".9rem" }}>{num}</div>
                 <h3 style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:"1.15rem", letterSpacing:"-.01em", marginBottom:".6rem" }}>{title}</h3>
-                <p style={{ fontSize:".8rem", color:css.text2, lineHeight:1.75, flex:1, marginBottom:"1.3rem" }}>{desc}</p>
+                <p style={{ fontSize:".8rem", color:c.text2, lineHeight:1.75, flex:1, marginBottom:"1.3rem" }}>{desc}</p>
                 <div style={{ display:"flex", flexWrap:"wrap", gap:".45rem", marginBottom:"1.3rem" }}>
-                  {tags.map(t => <span key={t} className="tag">{t}</span>)}
+                  {tags.map(t => <span key={t} className="tag-chip">{t}</span>)}
                 </div>
                 <div style={{ display:"flex", gap:".8rem" }}>
-                  {["GitHub","Live Demo"].map(l => (
-                    <a key={l} href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", color:css.accent, textDecoration:"none", display:"flex", alignItems:"center", gap:".3rem", transition:"color .2s" }}
-                      onMouseEnter={e=>e.currentTarget.style.color=css.accent2}
-                      onMouseLeave={e=>e.currentTarget.style.color=css.accent}>
-                      {l === "GitHub" ? "⌥" : "↗"} {l}
-                    </a>
+                  {["⌥ GitHub","↗ Live Demo"].map(l => (
+                    <a key={l} href="#" style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", color:c.accent, textDecoration:"none", transition:"color .2s" }}
+                      onMouseEnter={e=>e.currentTarget.style.color=c.accent2}
+                      onMouseLeave={e=>e.currentTarget.style.color=c.accent}>{l}</a>
                   ))}
                 </div>
               </div>
@@ -302,23 +314,23 @@ export default function App() {
         </div>
       </section>
 
-      {/* EDUCATION */}
-      <section id="education" style={{ padding:"6rem 5%", background:css.bg2 }}>
+      {/* ── EDUCATION ── */}
+      <section id="education" style={{ padding:"6rem 8%", background:c.bg2 }}>
         <div style={{ maxWidth:"800px", margin:"0 auto" }}>
           <div className="section-tag">Education</div>
           <h2 className="section-title">Academic Journey</h2>
           <div style={{ display:"flex", flexDirection:"column", gap:"1.3rem", marginTop:"2.5rem" }}>
             {[
               { icon:"🎓", degree:"B.E. / B.Tech — Computer Science & Engineering", inst:"Your College / University Name", year:"2022 – 2026 · CGPA: 8.5 / 10" },
-              { icon:"🏫", degree:"Higher Secondary Education (12th) — Science / CS", inst:"Your School / Junior College", year:"2020 – 2022 · 92%" },
-              { icon:"📚", degree:"Secondary Education (10th)", inst:"Your School Name", year:"2019 – 2020 · 95%" },
+              { icon:"🏫", degree:"Higher Secondary Education (12th) — Science / CS", inst:"Your School / Junior College", year:"2020 – 2022 · Percentage: 92%" },
+              { icon:"📚", degree:"Secondary Education (10th)", inst:"Your School Name", year:"2019 – 2020 · Percentage: 95%" },
             ].map(({ icon, degree, inst, year }) => (
-              <div key={degree} className="edu-item">
+              <div key={degree} className="edu-item" style={{ background:c.card, border:`1px solid ${c.cardBorder}`, borderRadius:"14px", padding:"1.8rem 2rem", display:"grid", gridTemplateColumns:"auto 1fr", gap:"1.4rem", alignItems:"start", transition:"border-color .2s,transform .2s" }}>
                 <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:"linear-gradient(135deg,#7c5cfc,#4f8ef7)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.2rem" }}>{icon}</div>
                 <div>
                   <div style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:"1rem", marginBottom:".3rem" }}>{degree}</div>
-                  <div style={{ fontSize:".83rem", color:css.accent, marginBottom:".25rem" }}>{inst}</div>
-                  <div style={{ fontSize:".73rem", color:css.text3, letterSpacing:".05em" }}>{year}</div>
+                  <div style={{ fontSize:".83rem", color:c.accent, marginBottom:".25rem" }}>{inst}</div>
+                  <div style={{ fontSize:".72rem", color:c.text3, letterSpacing:".05em" }}>{year}</div>
                 </div>
               </div>
             ))}
@@ -326,19 +338,19 @@ export default function App() {
         </div>
       </section>
 
-      {/* ACHIEVEMENTS */}
-      <section id="achievements" style={{ padding:"6rem 5%" }}>
+      {/* ── ACHIEVEMENTS ── */}
+      <section id="achievements" style={{ padding:"6rem 8%", background:c.bg }}>
         <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
           <div className="section-tag">Achievements</div>
           <h2 className="section-title">Milestones</h2>
-          <p style={{ color:css.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"500px", marginBottom:"3rem" }}>Certifications, competitions, and recognitions that mark my growth.</p>
+          <p style={{ color:c.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"500px", marginBottom:"3rem" }}>Certifications, competitions, and recognitions that mark my growth.</p>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))", gap:"1.2rem" }}>
             {achievements.map(({ icon, title, desc }) => (
-              <div key={title} className="ach-card">
-                <div style={{ width:"38px", height:"38px", flexShrink:0, borderRadius:"10px", background:css.bg2, border:`1px solid ${css.border}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.1rem" }}>{icon}</div>
+              <div key={title} className="ach-card" style={{ background:c.card, border:`1px solid ${c.cardBorder}`, borderRadius:"12px", padding:"1.5rem", display:"flex", gap:"1rem", alignItems:"start", transition:"border-color .2s,transform .2s" }}>
+                <div style={{ width:"38px", height:"38px", flexShrink:0, borderRadius:"10px", background:c.bg2, border:`1px solid ${c.border}`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.1rem" }}>{icon}</div>
                 <div>
                   <div style={{ fontFamily:"'Syne',sans-serif", fontWeight:600, fontSize:".92rem", marginBottom:".3rem" }}>{title}</div>
-                  <div style={{ fontSize:".76rem", color:css.text3, lineHeight:1.6 }}>{desc}</div>
+                  <div style={{ fontSize:".76rem", color:c.text3, lineHeight:1.6 }}>{desc}</div>
                 </div>
               </div>
             ))}
@@ -346,12 +358,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* CONTACT */}
-      <section id="contact" style={{ padding:"6rem 5%", background:css.bg2 }}>
+      {/* ── CONTACT ── */}
+      <section id="contact" style={{ padding:"6rem 8%", background:c.bg2 }}>
         <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
           <div className="section-tag">Contact</div>
           <h2 className="section-title">Let's Connect</h2>
-          <p style={{ color:css.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"480px", marginBottom:"3rem" }}>Have a project in mind or just want to say hi? My inbox is always open.</p>
+          <p style={{ color:c.text2, fontSize:".88rem", lineHeight:1.7, maxWidth:"480px", marginBottom:"3rem" }}>Have a project in mind or just want to say hi? My inbox is always open.</p>
           <div className="contact-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1.2fr", gap:"3.5rem" }}>
             <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
               {[
@@ -360,10 +372,10 @@ export default function App() {
                 { icon:"⌥", label:"GitHub", val:"github.com/yeshwanth-m", href:"https://github.com" },
                 { icon:"🐦", label:"Twitter / X", val:"@yeshwanth_m", href:"https://twitter.com" },
               ].map(({ icon, label, val, href }) => (
-                <a key={label} href={href} target="_blank" rel="noreferrer" className="contact-link">
-                  <div style={{ width:"36px", height:"36px", borderRadius:"9px", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:".95rem" }}>{icon}</div>
+                <a key={label} href={href} target="_blank" rel="noreferrer" className="contact-link" style={{ display:"flex", alignItems:"center", gap:"1rem", background:c.card, border:`1px solid ${c.cardBorder}`, borderRadius:"12px", padding:"1.1rem 1.4rem", textDecoration:"none", color:c.text, transition:"border-color .2s,transform .2s" }}>
+                  <div style={{ width:"36px", height:"36px", borderRadius:"9px", background:"linear-gradient(135deg,#4f8ef7,#7c5cfc)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:".9rem", flexShrink:0 }}>{icon}</div>
                   <div>
-                    <div style={{ fontSize:".7rem", color:css.text3, letterSpacing:".07em", textTransform:"uppercase" }}>{label}</div>
+                    <div style={{ fontSize:".7rem", color:c.text3, letterSpacing:".07em", textTransform:"uppercase" }}>{label}</div>
                     <div style={{ fontSize:".85rem", marginTop:".15rem" }}>{val}</div>
                   </div>
                 </a>
@@ -373,19 +385,19 @@ export default function App() {
               <div className="form-row" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:".95rem" }}>
                 {["First Name","Last Name"].map(p => (
                   <div key={p}>
-                    <label style={{ display:"block", fontSize:".68rem", color:css.text3, letterSpacing:".08em", textTransform:"uppercase", marginBottom:".4rem" }}>{p}</label>
-                    <input className="form-input" type="text" placeholder={p === "First Name" ? "John" : "Doe"} />
+                    <label style={{ display:"block", fontSize:".68rem", color:c.text3, letterSpacing:".08em", textTransform:"uppercase", marginBottom:".4rem" }}>{p}</label>
+                    <input className="form-input" type="text" placeholder={p==="First Name"?"John":"Doe"} />
                   </div>
                 ))}
               </div>
               {[["Email Address","email","john@example.com"],["Subject","text","Let's collaborate on..."]].map(([l,t,p]) => (
                 <div key={l}>
-                  <label style={{ display:"block", fontSize:".68rem", color:css.text3, letterSpacing:".08em", textTransform:"uppercase", marginBottom:".4rem" }}>{l}</label>
+                  <label style={{ display:"block", fontSize:".68rem", color:c.text3, letterSpacing:".08em", textTransform:"uppercase", marginBottom:".4rem" }}>{l}</label>
                   <input className="form-input" type={t} placeholder={p} />
                 </div>
               ))}
               <div>
-                <label style={{ display:"block", fontSize:".68rem", color:css.text3, letterSpacing:".08em", textTransform:"uppercase", marginBottom:".4rem" }}>Message</label>
+                <label style={{ display:"block", fontSize:".68rem", color:c.text3, letterSpacing:".08em", textTransform:"uppercase", marginBottom:".4rem" }}>Message</label>
                 <textarea className="form-input" rows={4} placeholder="Hi Yeshwanth, I'd love to discuss..." style={{ resize:"vertical" }} />
               </div>
               <button className="btn-primary" style={{ alignSelf:"flex-start" }}>✈ Send Message</button>
@@ -394,12 +406,17 @@ export default function App() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ background:css.bg, borderTop:`1px solid ${css.border}`, padding:"2.5rem 5%", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:"1rem" }}>
-        <div style={{ fontSize:".76rem", color:css.text3 }}>© 2026 Yeshwanth M — Built with ♥ and code.</div>
+      {/* ── FOOTER ── */}
+      <footer style={{ background:c.bg, borderTop:`1px solid ${c.border}`, padding:"2.5rem 8%", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:"1rem" }}>
+        <div style={{ fontSize:".76rem", color:c.text3 }}>© 2026 Yeshwanth M — Built with ♥ and code.</div>
         <div style={{ display:"flex", gap:".7rem" }}>
           {[["⌥","GitHub","https://github.com"],["💼","LinkedIn","https://linkedin.com"],["🐦","Twitter","https://twitter.com"],["✉️","Email","mailto:yeshwanth@email.com"]].map(([icon,label,href]) => (
-            <a key={label} href={href} target="_blank" rel="noreferrer" className="social-icon" title={label}>{icon}</a>
+            <a key={label} href={href} target="_blank" rel="noreferrer" title={label}
+              style={{ width:"36px", height:"36px", borderRadius:"9px", border:`1px solid ${c.border}`, display:"flex", alignItems:"center", justifyContent:"center", color:c.text3, textDecoration:"none", fontSize:".85rem", transition:"border-color .2s,color .2s,transform .2s" }}
+              onMouseEnter={e=>{e.currentTarget.style.borderColor=c.accent;e.currentTarget.style.color=c.accent;e.currentTarget.style.transform="translateY(-2px)"}}
+              onMouseLeave={e=>{e.currentTarget.style.borderColor=c.border;e.currentTarget.style.color=c.text3;e.currentTarget.style.transform="translateY(0)"}}>
+              {icon}
+            </a>
           ))}
         </div>
       </footer>
