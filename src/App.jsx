@@ -128,7 +128,7 @@ export default function App() {
           {navLinks.map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="nav-link">{l}</a></li>)}
         </ul>
         <div style={{ display:"flex", gap:".7rem", alignItems:"center" }}>
-          <a href="\public\yeshwanth-resume.pdf" download={true} style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", padding:".46rem 1rem", border:`1px solid ${c.accent}`, color:c.accent, background:"transparent", borderRadius:"6px", textDecoration:"none", transition:"background .2s,color .2s" }}
+          <a href=".\assets\yeshwanth-resume.pdf" download={true} style={{ fontFamily:"'DM Mono',monospace", fontSize:".72rem", letterSpacing:".06em", textTransform:"uppercase", padding:".46rem 1rem", border:`1px solid ${c.accent}`, color:c.accent, background:"transparent", borderRadius:"6px", textDecoration:"none", transition:"background .2s,color .2s" }}
             onMouseEnter={e=>{e.currentTarget.style.background=c.accent;e.currentTarget.style.color="#fff"}}
             onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color=c.accent}}>
             ↓ Resume
