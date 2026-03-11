@@ -129,7 +129,7 @@ export default function App() {
         </ul>
         <div style={{ display:"flex", gap:".7rem", alignItems:"center" }}>
          <a
-  href="/public/yeshwanth-resume.pdf"
+  href="/yeshwanth-resume.pdf"
   download
   style={{
     fontFamily: "'DM Mono',monospace",
