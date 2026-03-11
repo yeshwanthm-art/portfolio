@@ -128,11 +128,11 @@ export default function App() {
           {navLinks.map(l => <li key={l}><a href={`#${l.toLowerCase()}`} className="nav-link">{l}</a></li>)}
         </ul>
         <div style={{ display:"flex", gap:".7rem", alignItems:"center" }}>
-         <a
+        <a
   href="/yeshwanth-resume.pdf"
   download
   style={{
-    fontFamily: "'DM Mono',monospace",
+    fontFamily: "'DM Mono', monospace",
     fontSize: ".72rem",
     letterSpacing: ".06em",
     textTransform: "uppercase",
@@ -142,15 +142,15 @@ export default function App() {
     background: "transparent",
     borderRadius: "6px",
     textDecoration: "none",
-    transition: "background .2s,color .2s"
+    transition: "background .2s, color .2s"
   }}
-  onMouseEnter={e=>{
-    e.currentTarget.style.background=c.accent
-    e.currentTarget.style.color="#fff"
+  onMouseEnter={(e) => {
+    e.currentTarget.style.background = c.accent;
+    e.currentTarget.style.color = "#fff";
   }}
-  onMouseLeave={e=>{
-    e.currentTarget.style.background="transparent"
-    e.currentTarget.style.color=c.accent
+  onMouseLeave={(e) => {
+    e.currentTarget.style.background = "transparent";
+    e.currentTarget.style.color = c.accent;
   }}
 >
   ↓ Resume
